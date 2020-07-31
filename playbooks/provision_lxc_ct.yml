@@ -1,0 +1,7 @@
+---
+- hosts: proxmox 
+  remote_user: root 
+  tasks:
+    - name: test echo 
+      shell: /usr/bin/echo "hello"
+  

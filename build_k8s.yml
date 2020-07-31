@@ -1,0 +1,2 @@
+---
+- import_playbook: playbooks/deploy_lxc_containers.yml
