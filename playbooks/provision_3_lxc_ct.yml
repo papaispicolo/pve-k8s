@@ -1,0 +1,75 @@
+---
+- hosts: proxmox 
+  remote_user: root
+  vars:
+    id_list:
+      - "{{ k8s_node0_id }}"
+      - "{{ k8s_node1_id }}"
+      - "{{ k8s_node2_id }}"
+
+    id_ct_config_list:
+      - { id: "{{ k8s_node0_id }}", pw: "{{ root_password }}", hn: "{{ k8s_node0_hn }}", cpu: "{{ k8s_node0_cpu }}", mem: "{{ k8s_node0_mem }}", bridge: "{{ k8s_node0_bridge }}", ip: "{{ k8s_node0_ip }}", mac: "{{ k8s_node0_mac }}" , sn: "{{ k8s_node0_sn }}", gw: "{{ k8s_node0_gw }}", ns: "{{ k8s_node0_ns }}", sd: "{{ k8s_node0_sd }}", stg: "{{ k8s_node0_stg }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node0_disk_space }}" }
+      - { id: "{{ k8s_node1_id }}", pw: "{{ root_password }}", hn: "{{ k8s_node1_hn }}", cpu: "{{ k8s_node1_cpu }}", mem: "{{ k8s_node1_mem }}", bridge: "{{ k8s_node1_bridge }}", ip: "{{ k8s_node1_ip }}", mac: "{{ k8s_node1_mac }}" , sn: "{{ k8s_node1_sn }}", gw: "{{ k8s_node1_gw }}", ns: "{{ k8s_node1_ns }}", sd: "{{ k8s_node1_sd }}", stg: "{{ k8s_node1_stg }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node1_disk_space }}" }
+      - { id: "{{ k8s_node2_id }}", pw: "{{ root_password }}", hn: "{{ k8s_node2_hn }}", cpu: "{{ k8s_node2_cpu }}", mem: "{{ k8s_node2_mem }}", bridge: "{{ k8s_node2_bridge }}", ip: "{{ k8s_node2_ip }}", mac: "{{ k8s_node2_mac }}" , sn: "{{ k8s_node2_sn }}", gw: "{{ k8s_node2_gw }}", ns: "{{ k8s_node2_ns }}", sd: "{{ k8s_node2_sd }}", stg: "{{ k8s_node2_stg }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node2_disk_space }}" }
+
+    id_disk_size_list:
+      - { id: "{{ k8s_node0_id }}", size: "{{ k8s_node0_ds }}" }
+      - { id: "{{ k8s_node1_id }}", size: "{{ k8s_node1_ds }}" }
+      - { id: "{{ k8s_node2_id }}", size: "{{ k8s_node2_ds }}" }
+  
+  tasks:
+    - name: Creating a resource pool for the compute resources.
+      shell: pvesh create /pools -poolid "{{ k8s_resource_pool }}" --Comment "k8s cluster made from ubuntu "
+      ignore_errors: yes
+
+    - name: Downloading the template 
+      shell: pveam download {{ template_storage }} {{ lxc_template }}
+
+    # Use following line for static ip assignment
+    # --net0 "name=eth0,bridge={{ item.bridge }},hwaddr={{ item.mac }},ip={{ item.ip }}{{ item.sn }},gw={{ item.gw }},ip6=dhcp"
+    - name: Provisioning the LXC container instances.
+      shell: >
+          pct create {{ item.id }} {{ template_storage }}:vztmpl/{{ lxc_template }}
+          --pool "{{ k8s_resource_pool }}"
+          --password "{{ item.pw }}"
+          --description "k8s lxc instance"
+          --hostname "{{ item.hn }}"
+          --cores "{{ item.cpu }}"
+          --memory "{{ item.mem }}"
+          --net0 "name=eth0,bridge={{ item.bridge }},hwaddr={{ item.mac }},ip=dhcp"
+          --nameserver "{{ item.ns }}"
+          --searchdomain "{{ item.sd }}"
+          --ostype "ubuntu"
+          --onboot 1
+          --unprivileged 1
+          --storage "{{ item.stg }}"
+          --ssh-public-keys "{{ k8s_ansible_client_ssh_key }}"
+      with_items: "{{ id_ct_config_list }}"
+
+    - name: Pausing for 5 seconds to allow the containers to finish being created.
+      wait_for: timeout=5
+
+    - name: Resizing the volumes
+      shell: pct resize {{ item.id }} rootfs {{ item.size }}
+      with_items: "{{ id_disk_size_list }} "
+
+    - name: enable features for docker.
+      shell: >
+          pct set {{ item }} 
+          --features keyctl=1,nesting=1
+      with_items: "{{ id_list }}"
+
+    - name: Start all lxc containers
+      shell: pct start {{ item }}
+      with_items: "{{ id_list }}"
+
+    - name: Pausing for 10 seconds to allow the containers to start.
+      wait_for: timeout=10
+
+    - name: Enable root ssh
+      shell: lxc-attach -n {{ item }} -- sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+      with_items: "{{ id_list }}"
+
+    - name: Restart sshd
+      shell: lxc-attach -n {{ item }} -- systemctl restart sshd
+      with_items: "{{ id_list }}"

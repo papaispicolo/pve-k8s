@@ -1,0 +1,33 @@
+---
+- hosts: proxmox 
+  remote_user: root
+  vars:
+    id_list:
+      - "{{ k8s_node0_id }}"
+      - "{{ k8s_node1_id }}"
+      - "{{ k8s_node2_id }}"
+
+    id_ct_config_list:
+      - { id: "{{ k8s_node0_id }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node0_disk_space }}" }
+      - { id: "{{ k8s_node1_id }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node1_disk_space }}" }
+      - { id: "{{ k8s_node2_id }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node2_disk_space }}" }
+
+  tasks:
+    - name: Stop all lxc containers
+      shell: pct stop {{ item }}
+      with_items: "{{ id_list }}"
+
+    - name: Mount shared disk among k8s containers.
+      shell: >
+          pct set {{ item.id }} 
+          --mp0 "{{ item.disk_share }},mp=/lab/share"
+          --mp1 "{{ item.disk_dataset }},mp=/lab/dataset"
+          --mp2 "{{ item.disk_space }},mp=/lab/space"
+      with_items: "{{ id_ct_config_list }}"
+
+    - name: Start all lxc containers
+      shell: pct start {{ item }}
+      with_items: "{{ id_list }}"
+
+    - name: Pausing for 10 seconds to allow the containers to start.
+      wait_for: timeout=10

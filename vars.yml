@@ -1,0 +1,103 @@
+# LXC template to use for your containers. 
+# To find the newest release: $pveam available | grep ubuntu | awk '{print $2}'
+lxc_template: 'ubuntu-20.04-standard_20.04-1_amd64.tar.gz'
+
+# Storage Volume where your template will be stored
+template_storage: 'local'
+
+# Pool for your compute resources to be placed in
+k8s_resource_pool: "Kubernetes"
+
+# Path to the SSH Public Key on your Proxmox Server to be used with your compute resources
+k8s_ssh_key: "/root/.ssh/id_rsa.pub"
+# cp local rsa.pub key to pve host, so it can be added when containers are provisioned  
+# ubt@ubt-stg:~/.ssh$ scp id_rsa.client.pub root@pve:/root/.ssh/id_rsa.client.pub
+k8s_ansible_client_ssh_key: "/root/.ssh/id_rsa.client.pub"
+
+# root pw
+root_password: 'k8s#pw#1234'
+
+# VM IDs
+k8s_node0_id: '120'
+k8s_node1_id: '121'
+k8s_node2_id: '122'
+
+# Hostnames
+k8s_node0_hn: "k8s-n00"
+k8s_node1_hn: "k8s-n01"
+k8s_node2_hn: "k8s-n02"
+
+# Number of CPUs
+k8s_node0_cpu: "4"
+k8s_node1_cpu: "4"
+k8s_node2_cpu: "4"
+
+# Amount of memory expressed in megabytes
+k8s_node0_mem: "32768"
+k8s_node1_mem: "32768"
+k8s_node2_mem: "32768"
+
+# Disk Sizes
+k8s_node0_ds: "100G"
+k8s_node1_ds: "100G"
+k8s_node2_ds: "100G"
+
+# IP Addresses
+k8s_node0_ip: "192.168.1.120"
+k8s_node1_ip: "192.168.1.121"
+k8s_node2_ip: "192.168.1.122"
+
+# Mac addresses # Use mac if static ip assignment via dhcp is planned
+k8s_node0_mac: "2A:B1:18:65:25:3A"
+k8s_node1_mac: "BA:BC:17:91:FE:4E"
+k8s_node2_mac: "CA:93:34:96:8B:02"
+
+# Subnet Sizes
+k8s_node0_sn: "/24"
+k8s_node1_sn: "/24"
+k8s_node2_sn: "/24"
+
+# Network Gateway
+k8s_node0_gw: "192.168.1.1"
+k8s_node1_gw: "192.168.1.1"
+k8s_node2_gw: "192.168.1.1"
+
+# DNS Servers
+k8s_node0_ns: "192.168.1.1"
+k8s_node1_ns: "192.168.1.1"
+k8s_node2_ns: "192.168.1.1"
+
+# Search Domains
+k8s_node0_sd: "fritz.box"
+k8s_node1_sd: "fritz.box"
+k8s_node2_sd: "fritz.box"
+
+# Network Bridges
+k8s_node0_bridge: "vmbr0"
+k8s_node1_bridge: "vmbr0"
+k8s_node2_bridge: "vmbr0"
+
+# Storage volumes for rootfs 
+k8s_node0_stg: "local-lvm"
+k8s_node1_stg: "local-lvm"
+k8s_node2_stg: "local-lvm"
+
+# Optional storage mount 
+k8s_lab_disk_share : "/mnt/pve/wd80/private/lab/share"
+k8s_lab_disk_dataset : "/mnt/pve/wd80/private/lab/dataset"
+k8s_node0_disk_space : "/mnt/pve/wd80/private/lab/k8s-n00"
+k8s_node1_disk_space : "/mnt/pve/wd80/private/lab/k8s-n01"
+k8s_node2_disk_space : "/mnt/pve/wd80/private/lab/k8s-n02"
+
+
+# CIDR for the Calico Pod Network - MUST be different from any other CIDR on your network to avoid IP collision
+calico_cidr: '172.16.0.0'
+
+# URL for the RBAC Policy for the Calico Network Policy: https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#tabs-pod-install-1
+calico_rbac_url: "https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml"
+
+# URL for the Calico Network Policy: https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#tabs-pod-install-1
+calico_policy_url: 'https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml'
+
+# Administrator user that is created for Kubernetes
+k8s_user_name: 'admin'

@@ -1,0 +1,45 @@
+---
+- hosts: proxmox 
+  remote_user: root
+  vars:
+    id_list:
+      - "{{ k8s_node0_id }}"
+      - "{{ k8s_node1_id }}"
+      - "{{ k8s_node2_id }}"
+  
+  tasks:
+    - name: Stopping the lxc containers.
+      shell: pct stop {{ item }}
+      with_items: "{{ id_list}}"
+      ignore_errors: yes
+
+    - name: Destroying the lxc containers.
+      shell: pct destroy {{ item }}
+      with_items: "{{ id_list }}"
+      ignore_errors: yes
+
+    - name: Deleting the resource pool.
+      shell: pvesh delete /pools/{{ k8s_resource_pool }} 
+    
+    - name: Removing the overlay kernel module from /etc/modules.
+      replace:
+        path: /etc/modules
+        regexp: '^overlay$'
+      ignore_errors: yes
+    
+    - name: Stopping the overlay module on the proxmox server.
+      modprobe:
+        name: overlay
+        state: absent
+      ignore_errors: yes
+
+#    - name: Remove the lxc template
+#      shell: pveam remove {{ template_storage }}:vztmpl/{{ lxc_template }}
+#      ignore_errors: yes
+
+    - name: Deleting the ~/.kube directory.
+      local_action:
+        module: file
+        path: ~/.kube
+        state: absent
+      ignore_errors: yes

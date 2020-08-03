@@ -1,0 +1,14 @@
+---
+- hosts: proxmox 
+  remote_user: root
+  vars:
+    id_list:
+      - "{{ k8s_node0_id }}"
+      - "{{ k8s_node1_id }}"
+      - "{{ k8s_node2_id }}"
+  
+  tasks:
+    - name: Stopping the lxc containers.
+      shell: pct stop {{ item }}
+      with_items: "{{ id_list}}"
+      ignore_errors: yes

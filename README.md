@@ -2,79 +2,44 @@
 
 Provision 3 lxc nodes k8s cluster on Proxmox using ansible.
 
+Referenced https://github.com/zimmertr/Bootstrap-Kubernetes-with-LXC
+
+
 ## prerequisites 
+
+1. proxmox host 
 
 ![](./docs/img/proxmox-host.png)
 
 
-A machine in which you would run ansible script. 
-
-```bash 
-apt install ansible
-ssh-copy-id root@proxmox
-```
+2. Ansible ready machine [example - setting ansible](./docs/ex_ansible_setting.md)
 
 
-contents in /etc/ansible/hosts 
 
-```bash
-[proxmox]
-192.168.1.101
-```
+## Procedures in playbook 
 
-Check ansible connection to host
+1. provision 3 lxc containers - `provision_3_lxc_ct.yml` 
 
-```
-$ ansible proxmox -u root -m ping
-[WARNING]: Platform linux on host 192.168.1.101 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
-https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
-192.168.1.101 | SUCCESS => {
-    "ansible_facts": {
-        "discovered_interpreter_python": "/usr/bin/python"
-    },
-    "changed": false,
-    "ping": "pong"
-}
+2. mount shared disks - `mount_shared_disks.yml`
 
-$ ansible proxmox -u root -a "/bin/echo hello "
-[WARNING]: Platform linux on host 192.168.1.101 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
-https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
-192.168.1.101 | CHANGED | rc=0 >>
-hello
-```
+3. install docker - `docker_inside_lxc.yml` 
 
-or edit inventory.ini 
+
+
+## Run provisioning
 
 ```bash
-[proxmox]
-192.168.1.101
+$ ansible-playbook -e @vars.yml -i inventory.ini build_k8s.yml
 ```
+
+## Remove provisioned resources 
 
 ```bash
-$ ansible proxmox -i inventory.ini -u root -a "/bin/echo hello "
-[WARNING]: Platform linux on host 192.168.1.101 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
-https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
-192.168.1.101 | CHANGED | rc=0 >>
-hello
+$ ansible-playbook -e @vars.yml -i inventory.ini playbooks/delete_all_resources.yml
 ```
 
-```bash
-ansible-playbook -e @vars.yml -i inventory.ini build_k8s.yml
-```
+## References 
 
+proxmox pct command [pct manual](https://pve.proxmox.com/pve-docs/pct.1.html)
 
-## Provisioning 3 lxc containers 
-
-1. 
-
-2. 
-
-3. 
-
-
-## Configure lxc containers 
-
-
-
-
-
+docker in lxc [docker in lxc](https://discuss.linuxcontainers.org/t/working-install-of-docker-ce-in-lxc-unprivileged-container-in-proxmox/3828)
