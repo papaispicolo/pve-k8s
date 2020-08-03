@@ -41,7 +41,7 @@
           --searchdomain "{{ item.sd }}"
           --ostype "ubuntu"
           --onboot 1
-          --unprivileged 1
+          --unprivileged 0
           --storage "{{ item.stg }}"
           --ssh-public-keys "{{ k8s_ansible_client_ssh_key }}"
       with_items: "{{ id_ct_config_list }}"
