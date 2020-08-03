@@ -77,10 +77,10 @@ k8s_node0_bridge: "vmbr0"
 k8s_node1_bridge: "vmbr0"
 k8s_node2_bridge: "vmbr0"
 
-# Storage volumes for rootfs 
-k8s_node0_stg: "local-lvm"
-k8s_node1_stg: "local-lvm"
-k8s_node2_stg: "local-lvm"
+# Storage volumes for rootfs [ wd80 , local-lvm ]
+k8s_node0_stg: "wd80"
+k8s_node1_stg: "wd80"
+k8s_node2_stg: "wd80"
 
 # Optional storage mount 
 k8s_lab_disk_share : "/mnt/pve/wd80/private/lab/share"
