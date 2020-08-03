@@ -1,0 +1,12 @@
+---
+- hosts: k8s_gpu_nodes 
+  remote_user: root
+
+  tasks:
+    - name: Download NVIDIA graphics driver
+      get_url: 
+        url: http://us.download.nvidia.com/XFree86/Linux-x86_64/440.82/NVIDIA-Linux-x86_64-440.82.run 
+        dest: /lab/space/NVIDIA-Linux-x86_64-440.82.run
+    
+    - name: Install driver
+      shell : sh /lab/space/NVIDIA-Linux-x86_64-440.82.run --ui=none --no-kernel-module --no-x-check --install-libglvnd --no-questions

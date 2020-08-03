@@ -1,0 +1,36 @@
+---
+- hosts: proxmox 
+  remote_user: root
+  vars:
+    gpu_node_list:
+      - "{{ k8s_node2_id }}"
+
+  tasks:
+    - name: Stop all gpu lxc containers
+      shell: pct stop {{ item }}
+      with_items: "{{ gpu_node_list }}"
+
+    - name: Wait 5 secons until lxc containers are fully stop
+      wait_for: timeout=5
+
+    - name: passthrough the GPU.
+      shell: |
+        echo "
+        # GPU Passthrough config
+        lxc.cgroup.devices.allow: c 195:* rwm
+        lxc.cgroup.devices.allow: c 236:* rwm
+        lxc.mount.entry: /dev/nvidia0 dev/nvidia0 none bind,optional,create=file
+        lxc.mount.entry: /dev/nvidia1 dev/nvidia1 none bind,optional,create=file
+        lxc.mount.entry: /dev/nvidiactl dev/nvidiactl none bind,optional,create=file
+        lxc.mount.entry: /dev/nvidia-modeset dev/nvidia-modeset none bind,optional,create=file
+        lxc.mount.entry: /dev/nvidia-uvm dev/nvidia-uvm none bind,optional,create=file
+        lxc.mount.entry: /dev/nvidia-uvm-tools dev/nvidia-uvm-tools none bind,optional,create=file
+        " >> /etc/pve/lxc/{{ item }}.conf 
+      with_items: "{{ gpu_node_list }}"
+
+    - name: Start all gpu lxc containers
+      shell: pct start {{ item }}
+      with_items: "{{ gpu_node_list }}"
+
+    - name: Wait 10 secons to allow containers restarted 
+      wait_for: timeout=10
