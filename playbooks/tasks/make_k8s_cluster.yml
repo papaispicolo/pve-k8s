@@ -16,7 +16,7 @@
       register: kubeadm_ca
 
     - name: Start cluster on master 
-      shell: kubeadm init {{ pod_network }} --ignore-preflight-errors=all
+      shell: kubeadm init {{ pod_network }} {{apiserver_advertise_address}} {{dns_domain}} {{preflight_options}} 
       when: not kubeadm_ca.stat.exists
 
     - name: Make kube directory

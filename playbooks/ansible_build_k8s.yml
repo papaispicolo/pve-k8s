@@ -1,10 +1,10 @@
 ---
-- import_playbook: tasks/provision_3_lxc_ct.yml
-- import_playbook: tasks/mount_shared_disks.yml
-- import_playbook: tasks/prepare_k8s_lxc.yml
-- import_playbook: tasks/install_docker_inside_lxc.yml
-- import_playbook: tasks/install_nvidia_driver_gpu_nodes.yml
-- import_playbook: tasks/gpu_passthrough_lxc.yml
-- import_playbook: tasks/install_nvidia_docker_gpu_nodes.yml
-- import_playbook: tasks/install_k8s_lxc.yml
-#- import_playbook: tasks/make_k8s_cluster.yml
+#- import_playbook: tasks/provision_3_lxc_ct.yml
+#- import_playbook: tasks/mount_shared_disks.yml
+#- import_playbook: tasks/prepare_k8s_lxc.yml
+#- import_playbook: tasks/install_docker_inside_lxc.yml
+#- import_playbook: tasks/install_nvidia_driver_gpu_nodes.yml
+#- import_playbook: tasks/gpu_passthrough_lxc.yml
+#- import_playbook: tasks/install_nvidia_docker_gpu_nodes.yml
+#- import_playbook: tasks/install_k8s_lxc.yml
+- import_playbook: tasks/make_k8s_cluster.yml

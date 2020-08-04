@@ -20,6 +20,9 @@ k8s_sources_file: "/etc/apt/sources.list.d/kubernetes.list"
 k8s_apt_kube_key: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
 
 pod_network: --pod-network-cidr=10.244.0.0/16
+apiserver_advertise_address: --apiserver-advertise-address=192.168.1.120 
+dns_domain: --service-dns-domain=k8s.local
+preflight_options: --ignore-preflight-errors=all
 
 kube_file_path: "/home/kube_master/.kube"
 kube_config_path: "/home/kube_master/.kube/config"
