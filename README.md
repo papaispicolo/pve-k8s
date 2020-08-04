@@ -34,6 +34,7 @@ root@pve:/mnt/pve/wd80/private# tree -L 2
     ├── k8s-n00  
     ├── k8s-n01
     ├── k8s-n02
+    ├── k8s-n03    
     └── share
 ```
 
@@ -86,12 +87,12 @@ $ ansible-playbook -e @vars.yml -i inventory.ini ansible_purge_k8s.yml
 
 ### Check GPU 
 
-![](./docs/img/nvidia-smi-k8s-n02.png)
+![](./docs/img/nvidia-smi-k8s-n01.png)
 
 
 ### Check nvidia docker 
 
-![](./docs/img/nvidia-docker-k8s-n02.png)
+![](./docs/img/nvidia-docker-k8s-n01.png)
 
 
 ## References 
