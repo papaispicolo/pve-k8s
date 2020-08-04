@@ -1,0 +1,58 @@
+---
+- hosts: k8s_master_node
+  remote_user: root
+
+  tasks:
+    - name: Remove swap from fstab  
+      lineinfile: path=/etc/fstab regexp='swap' state=absent
+
+    - name: Disable swap
+      shell: swapoff -a
+      ignore_errors: yes
+
+    - name: Check if kubeadm has already run
+      stat: 
+        path: "/etc/kubernetes/pki/ca.key"
+      register: kubeadm_ca
+
+    - name: Start cluster on master 
+      shell: kubeadm init {{ pod_network }} --ignore-preflight-errors=all
+      when: not kubeadm_ca.stat.exists
+
+    - name: Make kube directory
+      shell: mkdir -p /root/.kube
+
+    - name: Copy config file 
+      shell: cp /etc/kubernetes/admin.conf /root/.kube/config
+
+    - name: Change ownership of kube directory 
+      shell: chown -R root:root /root/.kube 
+
+    - name: Test if nodes are found 
+      shell: kubectl get nodes 
+      register: result 
+
+    - debug: msg="{{ result.stdout }}"
+
+    - name: Generate join command 
+      shell: kubeadm token create --print-join-command 
+      register: join_command
+    
+    - name: Copy join command to local file
+      local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join_command.txt"
+
+
+- hosts: k8s_worker_nodes 
+  remote_user: root 
+
+  tasks: 
+    - name: Remove swap from fstab  
+      lineinfile: path=/etc/fstab regexp='swap' state=absent
+
+    - name: Disable swap
+      shell: swapoff -a
+      ignore_errors: yes
+
+    - name: Join cluster
+      command: "{{ lookup('file', './join_command.txt') }}"
+      ignore_errors: yes   

@@ -32,3 +32,21 @@
       apt:
         name: docker-ce
 
+    - name: Change docker driver to systemd 
+      shell: mkdir -p /etc/systemd/system/docker.service.d 
+
+    - name: set daemon.json 
+      shell: |
+        echo '{
+          "exec-opts": ["native.cgroupdriver=systemd"],
+          "log-driver": "json-file",
+          "log-opts": {
+            "max-size": "100m"
+          },
+          "storage-driver": "overlay2"
+        }' > /etc/docker/daemon.json 
+
+    - name: change permission of daemon.json and restart docker
+      shell: chmod 644 /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
+
+    

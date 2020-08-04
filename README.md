@@ -49,14 +49,14 @@ root@pve:/mnt/pve/wd80/private# tree -L 2
 
 ```bash
 $ cd playbooks
-$ ansible-playbook -e @vars.yml -i inventory.ini build_k8s.yml
+$ ansible-playbook -e @vars.yml -i inventory.ini ansible_build_k8s.yml
 ```
 
 ## Remove provisioned resources 
 
 ```bash
 $ cd playbooks
-$ ansible-playbook -e @vars.yml -i inventory.ini playbooks/delete_all_resources.yml
+$ ansible-playbook -e @vars.yml -i inventory.ini ansible_purge_k8s.yml
 ```
 
 ## References 

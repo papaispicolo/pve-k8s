@@ -14,6 +14,22 @@ k8s_ssh_key: "/root/.ssh/id_rsa.pub"
 # ubt@ubt-stg:~/.ssh$ scp id_rsa.client.pub root@pve:/root/.ssh/id_rsa.client.pub
 k8s_ansible_client_ssh_key: "/root/.ssh/id_rsa.client.pub"
 
+# k8s install
+k8s_gpg_key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+k8s_sources_file: "/etc/apt/sources.list.d/kubernetes.list"
+k8s_apt_kube_key: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+
+pod_network: --pod-network-cidr=10.244.0.0/16
+
+kube_file_path: "/home/kube_master/.kube"
+kube_config_path: "/home/kube_master/.kube/config"
+
+kube_admin_file: "/etc/kubernetes/admin.conf"
+
+flannel_url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+nvidia_device_plugin: "https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta3/nvidia-device-plugin.yml"
+
+
 # root pw
 root_password: 'k8s#pw#1234'
 
@@ -78,9 +94,9 @@ k8s_node1_bridge: "vmbr0"
 k8s_node2_bridge: "vmbr0"
 
 # Storage volumes for rootfs [ wd80 (hdd 8TB) , local-lvm (ssd 2TB) ]
-k8s_node0_stg: "local-lvm"
-k8s_node1_stg: "local-lvm"
-k8s_node2_stg: "local-lvm"
+k8s_node0_stg: "wd80"
+k8s_node1_stg: "wd80"
+k8s_node2_stg: "wd80"
 
 # Optional storage mount 
 k8s_lab_disk_share : "/mnt/pve/wd80/private/lab/share"

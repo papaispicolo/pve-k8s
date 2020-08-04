@@ -1,0 +1,33 @@
+---
+- hosts: k8s_nodes
+  remote_user: root
+
+  tasks:
+    - name: Clean apt 
+      shell: apt-get clean 
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Add GPG Key 
+      apt_key: 
+        url: "{{ k8s_gpg_key_url }}"
+        state: present
+
+    - name: Append to source list
+      shell: echo {{ k8s_apt_kube_key }} >> {{ k8s_sources_file }}
+      args: 
+        executable: /bin/bash 
+
+    - name: Update apt cache 
+      apt: 
+        update_cache: yes
+
+    - name: Install kubernetes
+      apt:
+        pkg:
+          - kubelet
+          - kubeadm
+          - kubectl 
+        

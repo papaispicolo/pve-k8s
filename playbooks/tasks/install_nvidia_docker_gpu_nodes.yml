@@ -25,11 +25,28 @@
     - name: Stop docker daemon 
       shell: systemctl stop docker 
 
-    - name: Configure docker daemon
-      shell: sed -i "s/nvidia-container-runtime/\/usr\/bin\/nvidia-container-runtime/g" /etc/docker/daemon.json
+    #- name: Configure docker daemon
+    #  shell: sed -i "s/nvidia-container-runtime/\/usr\/bin\/nvidia-container-runtime/g" /etc/docker/daemon.json
+
+    - name: Configure docker daemon 
+      shell: |
+        echo '{
+          "exec-opts": ["native.cgroupdriver=systemd"],
+          "log-driver": "json-file",
+          "log-opts": {
+            "max-size": "100m"
+          },
+          "storage-driver": "overlay2",
+          "runtimes": {
+            "nvidia": {
+              "path": "/usr/bin/nvidia-container-runtime",
+              "runtimeArgs": []
+            }
+          }
+        }' > /etc/docker/daemon.json 
 
     - name: Add nvidia-docker check 
       shell: echo "docker run --runtime nvidia nvidia/cuda:10.0-base nvidia-smi" > /root/check-nvidia-docker.sh
 
     - name: Restart docker daemon
-      shell: systemctl start docker
+      shell: chmod 644 /etc/docker/daemon.json && systemctl daemon-reload && systemctl start docker

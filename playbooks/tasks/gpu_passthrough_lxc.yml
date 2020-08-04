@@ -34,5 +34,6 @@
       shell: pct start {{ item }}
       with_items: "{{ gpu_node_list }}"
 
+      
     - name: Wait 10 secons to allow containers restarted 
       wait_for: timeout=10

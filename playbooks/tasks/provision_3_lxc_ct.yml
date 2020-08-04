@@ -33,7 +33,7 @@
     # - Set unprivileged 0 due to nvidia-docker issue. 
     # - Find a way to enable nvidia-docker in unprivileged lxc container
     # --unprivileged 1 # default, 
-    - name: Provisioning the LXC container instances.
+    - name: Provisioning LXC container instances.
       shell: >
           pct create {{ item.id }} {{ template_storage }}:vztmpl/{{ lxc_template }}
           --pool "{{ k8s_resource_pool }}"
@@ -50,6 +50,7 @@
           --unprivileged 0
           --storage "{{ item.stg }}"
           --ssh-public-keys "{{ k8s_ansible_client_ssh_key }}"
+          --swap 0
       with_items: "{{ id_ct_config_list }}"
 
     - name: Pausing for 5 seconds to allow the containers to finish being created.

@@ -1,0 +1,48 @@
+---
+  - hosts: proxmox
+    remote_user: root 
+  
+    vars:
+      id_list:
+        - "{{ k8s_node0_id }}"
+        - "{{ k8s_node1_id }}"
+        - "{{ k8s_node2_id }}"
+        
+    tasks:
+      - name: Enabling the overlay kernel module on proxmox host
+        shell: echo overlay >> /etc/modules
+
+      - name: Configuring the overlay kernel module to be loaded on boot. 
+        lineinfile:
+          path: /etc/modules 
+          line: 'overlay'
+      
+      - name: Loading the overlay kernel module.
+        modprobe: 
+          name: overlay
+
+      - name: Additional lxc config for k8s
+        shell: |
+          echo "## Additional config for k8s
+          lxc.apparmor.profile: unconfined
+          lxc.cap.drop: 
+          lxc.cgroup.devices.allow: a
+          lxc.mount.auto: proc:rw sys:rw
+          " >> /etc/pve/lxc/{{ item }}.conf 
+        with_items: "{{ id_list }}"
+
+      - name: Stop containers 
+        shell: pct stop {{ item }}
+        with_items: "{{ id_list }}"
+
+      - name: Wait for 5 secons while restart
+        wait_for: timeout=5
+      
+      - name: Start containers 
+        shell: pct start {{ item }}
+        with_items: "{{ id_list }}"
+
+      - name: Wait for 10 secons while restart
+        wait_for: timeout=10
+      
+      
