@@ -39,20 +39,5 @@
       register: join_command
     
     - name: Copy join command to local file
-      local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join_command.txt"
+      local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./file/join_command.txt"
 
-
-- hosts: k8s_worker_nodes 
-  remote_user: root 
-
-  tasks: 
-    - name: Remove swap from fstab  
-      lineinfile: path=/etc/fstab regexp='swap' state=absent
-
-    - name: Disable swap
-      shell: swapoff -a
-      ignore_errors: yes
-
-    - name: Join cluster
-      command: "{{ lookup('file', './join_command.txt') }}"
-      ignore_errors: yes   

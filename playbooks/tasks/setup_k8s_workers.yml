@@ -1,0 +1,16 @@
+---
+- hosts: k8s_worker_nodes 
+  remote_user: root 
+
+  tasks: 
+    - name: Remove swap from fstab  
+      lineinfile: path=/etc/fstab regexp='swap' state=absent
+
+    - name: Disable swap
+      shell: swapoff -a
+      ignore_errors: yes
+
+    - name: Join cluster
+      command: "{{ lookup('file', './file/join_command.txt') }} --ignore-preflight-errors=all "
+      ignore_errors: yes
+  

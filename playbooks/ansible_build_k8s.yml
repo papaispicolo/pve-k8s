@@ -7,4 +7,6 @@
 - import_playbook: tasks/gpu_passthrough_lxc.yml
 - import_playbook: tasks/install_nvidia_docker_gpu_nodes.yml
 - import_playbook: tasks/install_k8s_lxc.yml
-- import_playbook: tasks/make_k8s_cluster.yml
+- import_playbook: tasks/setup_k8s_master.yml
+- import_playbook: tasks/setup_k8s_workers.yml
+- import_playbook: tasks/setup_k8s_plugins.yml
