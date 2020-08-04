@@ -28,6 +28,11 @@
     # Use following line for static ip assignment
     # --net0 "name=eth0,bridge={{ item.bridge }},hwaddr={{ item.mac }},ip={{ item.ip }}{{ item.sn }},gw={{ item.gw }},ip6=dhcp"
     # Note : https://github.com/moby/moby/issues/6783 ( enable nvidia-docker lxc.cap.drop = / lxc.cgroup.devices.allow = a)
+    
+    # TODO
+    # - Set unprivileged 0 due to nvidia-docker issue. 
+    # - Find a way to enable nvidia-docker in unprivileged lxc container
+    # --unprivileged 1 # default, 
     - name: Provisioning the LXC container instances.
       shell: >
           pct create {{ item.id }} {{ template_storage }}:vztmpl/{{ lxc_template }}
@@ -42,7 +47,7 @@
           --searchdomain "{{ item.sd }}"
           --ostype "ubuntu"
           --onboot 1
-          --unprivileged 1
+          --unprivileged 0
           --storage "{{ item.stg }}"
           --ssh-public-keys "{{ k8s_ansible_client_ssh_key }}"
       with_items: "{{ id_ct_config_list }}"

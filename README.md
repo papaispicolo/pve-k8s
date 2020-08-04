@@ -17,7 +17,20 @@ Provision 3 lxc nodes k8s cluster on Proxmox using ansible.
 
 1. provision 3 lxc containers - `provision_3_lxc_ct.yml` 
 
-2. mount shared disks - `mount_shared_disks.yml`
+2. ( Optional ) mount shared disks - `mount_shared_disks.yml`
+
+For simple home lab setup : map shared directory lab into all lxc containers
+
+```bash
+root@pve:/mnt/pve/wd80/private# tree -L 2
+.
+└── lab          --> lxc:/lab
+    ├── dataset  
+    ├── k8s-n00  
+    ├── k8s-n01
+    ├── k8s-n02
+    └── share
+```
 
 3. install docker - `docker_inside_lxc.yml` 
 

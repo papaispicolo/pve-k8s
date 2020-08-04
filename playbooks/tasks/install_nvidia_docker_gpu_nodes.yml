@@ -17,7 +17,19 @@
     
     - name: Install nvidia docker 
       apt:
-        name: nvidia-container-toolkit
+        pkg:
+          - nvidia-docker2
+          - nvidia-container-runtime
+          - nvidia-container-toolkit
+
+    - name: Stop docker daemon 
+      shell: systemctl stop docker 
+
+    - name: Configure docker daemon
+      shell: sed -i "s/nvidia-container-runtime/\/usr\/bin\/nvidia-container-runtime/g" /etc/docker/daemon.json
+
+    - name: Add nvidia-docker check 
+      shell: echo "docker run --runtime nvidia nvidia/cuda:10.0-base nvidia-smi" > /root/check-nvidia-docker.sh
 
     - name: Restart docker daemon
-      shell: systemctl restart docker
+      shell: systemctl start docker
