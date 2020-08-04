@@ -6,6 +6,7 @@
       - "{{ k8s_node0_id }}"
       - "{{ k8s_node1_id }}"
       - "{{ k8s_node2_id }}"
+      - "{{ k8s_node3_id }}"
   
   tasks:
     - name: Stopping the lxc containers.
