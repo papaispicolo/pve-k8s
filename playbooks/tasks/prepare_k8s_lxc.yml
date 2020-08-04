@@ -1,4 +1,21 @@
 ---
+  - hosts: k8s_nodes 
+    remote_user: root 
+
+    tasks: 
+      - name: prepare /etc/kmsg , enable shared mount
+        shell: |
+          echo '#!/bin/sh -e
+
+          # Kubeadm 1.15 needs /dev/kmsg to be there, but it's not in lxc, but we can just use /dev/console instead
+          # see: https://github.com/kubernetes-sigs/kind/issues/662
+          if [ ! -e /dev/kmsg ]; then
+            ln -s /dev/console /dev/kmsg
+          fi
+          
+          mount --make-rshared /' > /etc/rc.local
+
+  
   - hosts: proxmox
     remote_user: root 
   
@@ -8,6 +25,9 @@
         - "{{ k8s_node1_id }}"
         - "{{ k8s_node2_id }}"
         
+    ## Tweak lxc container to run k8s
+    ## https://medium.com/@kvaps/run-kubernetes-in-lxc-container-f04aa94b6c9c 
+    ## https://github.com/MarijnKoesen/kubernetes-in-proxmox-with-kubeadm-lxc-and-wireshark#step-1-prepare-the-proxmox-host
     tasks:
       - name: Enabling the overlay kernel module on proxmox host
         shell: echo overlay >> /etc/modules
