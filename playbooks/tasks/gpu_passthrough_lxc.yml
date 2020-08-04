@@ -3,7 +3,7 @@
   remote_user: root
   vars:
     gpu_node_list:
-      - "{{ k8s_node2_id }}"
+      - "{{ k8s_node1_id }}"
 
   tasks:
     - name: Stop all gpu lxc containers

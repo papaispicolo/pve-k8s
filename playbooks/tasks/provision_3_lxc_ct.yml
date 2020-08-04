@@ -6,17 +6,20 @@
       - "{{ k8s_node0_id }}"
       - "{{ k8s_node1_id }}"
       - "{{ k8s_node2_id }}"
+      - "{{ k8s_node3_id }}"
 
     id_ct_config_list:
       - { id: "{{ k8s_node0_id }}", pw: "{{ root_password }}", hn: "{{ k8s_node0_hn }}", cpu: "{{ k8s_node0_cpu }}", mem: "{{ k8s_node0_mem }}", bridge: "{{ k8s_node0_bridge }}", ip: "{{ k8s_node0_ip }}", mac: "{{ k8s_node0_mac }}" , sn: "{{ k8s_node0_sn }}", gw: "{{ k8s_node0_gw }}", ns: "{{ k8s_node0_ns }}", sd: "{{ k8s_node0_sd }}", stg: "{{ k8s_node0_stg }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node0_disk_space }}" }
       - { id: "{{ k8s_node1_id }}", pw: "{{ root_password }}", hn: "{{ k8s_node1_hn }}", cpu: "{{ k8s_node1_cpu }}", mem: "{{ k8s_node1_mem }}", bridge: "{{ k8s_node1_bridge }}", ip: "{{ k8s_node1_ip }}", mac: "{{ k8s_node1_mac }}" , sn: "{{ k8s_node1_sn }}", gw: "{{ k8s_node1_gw }}", ns: "{{ k8s_node1_ns }}", sd: "{{ k8s_node1_sd }}", stg: "{{ k8s_node1_stg }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node1_disk_space }}" }
       - { id: "{{ k8s_node2_id }}", pw: "{{ root_password }}", hn: "{{ k8s_node2_hn }}", cpu: "{{ k8s_node2_cpu }}", mem: "{{ k8s_node2_mem }}", bridge: "{{ k8s_node2_bridge }}", ip: "{{ k8s_node2_ip }}", mac: "{{ k8s_node2_mac }}" , sn: "{{ k8s_node2_sn }}", gw: "{{ k8s_node2_gw }}", ns: "{{ k8s_node2_ns }}", sd: "{{ k8s_node2_sd }}", stg: "{{ k8s_node2_stg }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node2_disk_space }}" }
+      - { id: "{{ k8s_node3_id }}", pw: "{{ root_password }}", hn: "{{ k8s_node3_hn }}", cpu: "{{ k8s_node3_cpu }}", mem: "{{ k8s_node3_mem }}", bridge: "{{ k8s_node3_bridge }}", ip: "{{ k8s_node3_ip }}", mac: "{{ k8s_node3_mac }}" , sn: "{{ k8s_node3_sn }}", gw: "{{ k8s_node3_gw }}", ns: "{{ k8s_node3_ns }}", sd: "{{ k8s_node3_sd }}", stg: "{{ k8s_node3_stg }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node3_disk_space }}" }
 
     id_disk_size_list:
       - { id: "{{ k8s_node0_id }}", size: "{{ k8s_node0_ds }}" }
       - { id: "{{ k8s_node1_id }}", size: "{{ k8s_node1_ds }}" }
       - { id: "{{ k8s_node2_id }}", size: "{{ k8s_node2_ds }}" }
-  
+      - { id: "{{ k8s_node3_id }}", size: "{{ k8s_node3_ds }}" }
+
   tasks:
     - name: Creating a resource pool for the compute resources.
       shell: pvesh create /pools -poolid "{{ k8s_resource_pool }}" --Comment "k8s cluster made from ubuntu "

@@ -6,12 +6,14 @@
       - "{{ k8s_node0_id }}"
       - "{{ k8s_node1_id }}"
       - "{{ k8s_node2_id }}"
+      - "{{ k8s_node3_id }}"
 
     id_ct_config_list:
       - { id: "{{ k8s_node0_id }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node0_disk_space }}" }
       - { id: "{{ k8s_node1_id }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node1_disk_space }}" }
       - { id: "{{ k8s_node2_id }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node2_disk_space }}" }
-
+      - { id: "{{ k8s_node3_id }}", disk_share: "{{ k8s_lab_disk_share }}", disk_dataset: "{{ k8s_lab_disk_dataset }}", disk_space: "{{ k8s_node3_disk_space }}" }
+      
   tasks:
     - name: Stop all lxc containers
       shell: pct stop {{ item }}
