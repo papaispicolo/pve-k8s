@@ -41,3 +41,15 @@
     - name: Copy join command to local file
       local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./file/join_command.txt"
 
+    - name: Create a local ~/.kube directory on local workstation
+      local_action:
+        module: file
+        path: ~/.kube
+        state: directory
+
+    - name: Fetch k8s_config
+      shell: cat ~/.kube/config
+      register: k8s_config
+
+    - name: Copying .kube/config to local workstation
+      local_action: copy content={{ k8s_config.stdout }} dest=~/.kube/config

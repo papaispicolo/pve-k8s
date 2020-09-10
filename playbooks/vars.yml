@@ -123,3 +123,6 @@ k8s_node0_disk_space : "/mnt/pve/wd80/private/lab/k8s-n00"
 k8s_node1_disk_space : "/mnt/pve/wd80/private/lab/k8s-n01"
 k8s_node2_disk_space : "/mnt/pve/wd80/private/lab/k8s-n02"
 k8s_node3_disk_space : "/mnt/pve/wd80/private/lab/k8s-n03"
+
+# Insecured docker registries
+insecured_docker_registries: '["your_registry_url:port","192.168.1.3:38095"]'

@@ -36,6 +36,7 @@
           "log-opts": {
             "max-size": "100m"
           },
+          "insecure-registries": {{ insecured_docker_registries }},
           "storage-driver": "overlay2",
           "runtimes": {
             "nvidia": {

@@ -1,0 +1,59 @@
+
+
+
+root@k8s-n00:~# docker ps -a
+CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS                    PORTS               NAMES
+eb4aea4fac42        4e9f801d2217             "/opt/bin/flanneld -…"   24 hours ago        Up 24 hours                                   k8s_kube-flannel_kube-flannel-ds-amd64-clmwv_kube-system_4c28901e-e46b-4c66-b30b-0ca1962fde4c_0
+d1d2a5845ea2        quay.io/coreos/flannel   "cp -f /etc/kube-fla…"   24 hours ago        Exited (0) 24 hours ago                       k8s_install-cni_kube-flannel-ds-amd64-clmwv_kube-system_4c28901e-e46b-4c66-b30b-0ca1962fde4c_0
+5690ec7305d4        k8s.gcr.io/pause:3.2     "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-flannel-ds-amd64-clmwv_kube-system_4c28901e-e46b-4c66-b30b-0ca1962fde4c_0
+973db72ed96b        bc9c328f379c             "/usr/local/bin/kube…"   24 hours ago        Up 24 hours                                   k8s_kube-proxy_kube-proxy-d27rq_kube-system_70b88c91-e4f3-4051-948e-b6e30fc30b96_0
+e83b948ae896        k8s.gcr.io/pause:3.2     "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-proxy-d27rq_kube-system_70b88c91-e4f3-4051-948e-b6e30fc30b96_0
+b683b4193977        1b74e93ece2f             "kube-apiserver --ad…"   24 hours ago        Up 24 hours                                   k8s_kube-apiserver_kube-apiserver-k8s-n00_kube-system_d430c5e1647aca069ca121c5c8b90e10_0
+85fa83058625        d4ca8726196c             "etcd --advertise-cl…"   24 hours ago        Up 24 hours                                   k8s_etcd_etcd-k8s-n00_kube-system_ebc6adf6d6b4df2ad1ec37edb56ad48d_0
+2ef6cacd51e5        09d665d529d0             "kube-controller-man…"   24 hours ago        Up 24 hours                                   k8s_kube-controller-manager_kube-controller-manager-k8s-n00_kube-system_f6a9bf2865b2fe580f39f07ed872106b_0
+5c944f6d510c        cbdc8369d8b1             "kube-scheduler --au…"   24 hours ago        Up 24 hours                                   k8s_kube-scheduler_kube-scheduler-k8s-n00_kube-system_5146743ebb284c11f03dc85146799d8b_0
+870f208d2f69        k8s.gcr.io/pause:3.2     "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-apiserver-k8s-n00_kube-system_d430c5e1647aca069ca121c5c8b90e10_0
+3913096b0b2e        k8s.gcr.io/pause:3.2     "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_etcd-k8s-n00_kube-system_ebc6adf6d6b4df2ad1ec37edb56ad48d_0
+5e815b1afb08        k8s.gcr.io/pause:3.2     "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-scheduler-k8s-n00_kube-system_5146743ebb284c11f03dc85146799d8b_0
+aae0a784da6c        k8s.gcr.io/pause:3.2     "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-controller-manager-k8s-n00_kube-system_f6a9bf2865b2fe580f39f07ed872106b_0
+root@k8s-n00:~#
+
+
+
+root@k8s-n01:~# docker ps -a
+CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS                    PORTS               NAMES
+68163ac08533        k8s.gcr.io/coredns         "/coredns -conf /etc…"   24 hours ago        Up 24 hours                                   k8s_coredns_coredns-f9fd979d6-pfpvc_kube-system_3048ac8c-345b-43be-b186-10f61a2a624b_0
+e43ffa6d69a8        k8s.gcr.io/coredns         "/coredns -conf /etc…"   24 hours ago        Up 24 hours                                   k8s_coredns_coredns-f9fd979d6-2r8cg_kube-system_d051766c-0a03-428b-b54c-b23bdffd3458_0
+6699343b92dd        nvidia/k8s-device-plugin   "nvidia-device-plugin"   24 hours ago        Up 24 hours                                   k8s_nvidia-device-plugin-ctr_nvidia-device-plugin-daemonset-d868t_kube-system_910954b3-bc08-47dc-877a-b17edcc5b08f_0
+75e3fa87fda5        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_coredns-f9fd979d6-pfpvc_kube-system_3048ac8c-345b-43be-b186-10f61a2a624b_0
+090311556a53        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_coredns-f9fd979d6-2r8cg_kube-system_d051766c-0a03-428b-b54c-b23bdffd3458_0
+1c45632bd563        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_nvidia-device-plugin-daemonset-d868t_kube-system_910954b3-bc08-47dc-877a-b17edcc5b08f_0
+b6590e5923a6        4e9f801d2217               "/opt/bin/flanneld -…"   24 hours ago        Up 24 hours                                   k8s_kube-flannel_kube-flannel-ds-amd64-qxvtc_kube-system_f2ed51bf-d916-4f5e-bbe6-54b2b85de021_0
+61197ae0d001        quay.io/coreos/flannel     "cp -f /etc/kube-fla…"   24 hours ago        Exited (0) 24 hours ago                       k8s_install-cni_kube-flannel-ds-amd64-qxvtc_kube-system_f2ed51bf-d916-4f5e-bbe6-54b2b85de021_0
+281f76c5f8e8        k8s.gcr.io/kube-proxy      "/usr/local/bin/kube…"   24 hours ago        Up 24 hours                                   k8s_kube-proxy_kube-proxy-vqlm5_kube-system_d83cef0d-c811-4721-81c8-224144b6bfbf_0
+14052da4c127        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-flannel-ds-amd64-qxvtc_kube-system_f2ed51bf-d916-4f5e-bbe6-54b2b85de021_0
+bfd0198a0ca9        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-proxy-vqlm5_kube-system_d83cef0d-c811-4721-81c8-224144b6bfbf_0
+
+
+
+root@k8s-n02:~# docker ps -a
+CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS                    PORTS               NAMES
+6a2ba19326d1        nvidia/k8s-device-plugin   "nvidia-device-plugin"   24 hours ago        Up 24 hours                                   k8s_nvidia-device-plugin-ctr_nvidia-device-plugin-daemonset-f6d52_kube-system_87b2eb22-b4d0-42e6-98d3-17549f439ef9_0
+61a404ae5662        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_nvidia-device-plugin-daemonset-f6d52_kube-system_87b2eb22-b4d0-42e6-98d3-17549f439ef9_0
+17563139e23e        4e9f801d2217               "/opt/bin/flanneld -…"   24 hours ago        Up 24 hours                                   k8s_kube-flannel_kube-flannel-ds-amd64-wjtm2_kube-system_1fd2d20c-f4fc-4151-acb7-3d1179989fef_0
+395495b17781        quay.io/coreos/flannel     "cp -f /etc/kube-fla…"   24 hours ago        Exited (0) 24 hours ago                       k8s_install-cni_kube-flannel-ds-amd64-wjtm2_kube-system_1fd2d20c-f4fc-4151-acb7-3d1179989fef_0
+7b28930dea00        k8s.gcr.io/kube-proxy      "/usr/local/bin/kube…"   24 hours ago        Up 24 hours                                   k8s_kube-proxy_kube-proxy-sqlz6_kube-system_c382db0c-47c4-4d73-971e-915e5bb9e2c6_0
+c836793a10fe        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-flannel-ds-amd64-wjtm2_kube-system_1fd2d20c-f4fc-4151-acb7-3d1179989fef_0
+71591a3ce5bc        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-proxy-sqlz6_kube-system_c382db0c-47c4-4d73-971e-915e5bb9e2c6_0
+root@k8s-n02:~#
+
+
+root@k8s-n03:~# docker ps -a
+CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS                    PORTS               NAMES
+281f0a10c22c        nvidia/k8s-device-plugin   "nvidia-device-plugin"   24 hours ago        Up 24 hours                                   k8s_nvidia-device-plugin-ctr_nvidia-device-plugin-daemonset-xh574_kube-system_b1ea126c-b4f4-4787-8ea4-7d26e87fd7d7_0
+44725178a7e8        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_nvidia-device-plugin-daemonset-xh574_kube-system_b1ea126c-b4f4-4787-8ea4-7d26e87fd7d7_0
+b8cd4345a3cb        4e9f801d2217               "/opt/bin/flanneld -…"   24 hours ago        Up 24 hours                                   k8s_kube-flannel_kube-flannel-ds-amd64-x28d9_kube-system_cbc3d8d1-e324-4fef-a8cd-50b754dd7703_0
+aedd105cf9e6        quay.io/coreos/flannel     "cp -f /etc/kube-fla…"   24 hours ago        Exited (0) 24 hours ago                       k8s_install-cni_kube-flannel-ds-amd64-x28d9_kube-system_cbc3d8d1-e324-4fef-a8cd-50b754dd7703_0
+0d582f622e46        k8s.gcr.io/kube-proxy      "/usr/local/bin/kube…"   24 hours ago        Up 24 hours                                   k8s_kube-proxy_kube-proxy-ncx8v_kube-system_d8224e26-88b5-4cbd-a233-ff4d1fb919a9_0
+b40c3f614395        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-flannel-ds-amd64-x28d9_kube-system_cbc3d8d1-e324-4fef-a8cd-50b754dd7703_0
+99a9a028813e        k8s.gcr.io/pause:3.2       "/pause"                 24 hours ago        Up 24 hours                                   k8s_POD_kube-proxy-ncx8v_kube-system_d8224e26-88b5-4cbd-a233-ff4d1fb919a9_0
