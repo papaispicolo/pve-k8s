@@ -31,6 +31,7 @@
     - name: Configure docker daemon 
       shell: |
         echo '{
+          "default-runtime": "nvidia",
           "exec-opts": ["native.cgroupdriver=systemd"],
           "log-driver": "json-file",
           "log-opts": {
@@ -49,5 +50,8 @@
     - name: Add nvidia-docker check 
       shell: echo "docker run --runtime nvidia nvidia/cuda:10.0-base nvidia-smi" > /root/check-nvidia-docker.sh
 
+    - name: Change permission of docker daemon.json
+      shell: chmod 644 /etc/docker/daemon.json
+
     - name: Restart docker daemon
-      shell: chmod 644 /etc/docker/daemon.json && systemctl daemon-reload && systemctl start docker
+      shell: systemctl daemon-reload && systemctl start docker

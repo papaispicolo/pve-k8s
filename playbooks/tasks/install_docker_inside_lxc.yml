@@ -47,7 +47,8 @@
           "storage-driver": "overlay2"
         }' > /etc/docker/daemon.json 
 
-    - name: change permission of daemon.json and restart docker
-      shell: chmod 644 /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
+    - name: change daemon.json permission
+      shell: chmod 644 /etc/docker/daemon.json
 
-    
+    - name: restart docker
+      shell: systemctl daemon-reload && systemctl restart docker

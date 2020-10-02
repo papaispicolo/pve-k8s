@@ -15,8 +15,38 @@
         path: "/etc/kubernetes/pki/ca.key"
       register: kubeadm_ca
 
+    - name: Configure docker daemon
+      shell: |
+        echo '
+        apiServer:
+          certSANs:
+          - "{{k8s_cert_san1}}"
+          extraArgs:
+            authorization-mode: Node,RBAC
+          timeoutForControlPlane: 4m0s
+        apiVersion: kubeadm.k8s.io/v1beta2
+        certificatesDir: /etc/kubernetes/pki
+        clusterName: {{ k8s_cluster_name }}
+        controllerManager: {}
+        dns:
+          type: CoreDNS
+        etcd:
+          local:
+            dataDir: /var/lib/etcd
+        imageRepository: k8s.gcr.io
+        kind: ClusterConfiguration
+        kubernetesVersion: v1.19.2
+        networking:
+          dnsDomain: {{ dns_domain }}
+          podSubnet: {{ pod_network }}
+          serviceSubnet: 10.96.0.0/12
+        scheduler: {}
+        ' > /root/kubeadm.yml
+
+    #shell: kubeadm init {{ pod_network }} {{apiserver_advertise_address}} {{dns_domain}} {{preflight_options}}
+    #shell: kubeadm init --config /root/kubeadm.yaml {{apiserver_advertise_address}} {{preflight_options}}
     - name: Start cluster on master 
-      shell: kubeadm init {{ pod_network }} {{apiserver_advertise_address}} {{dns_domain}} {{preflight_options}} 
+      shell: kubeadm init --config /root/kubeadm.yml {{ preflight_options }}
       when: not kubeadm_ca.stat.exists
 
     - name: Make kube directory
@@ -51,5 +81,5 @@
       shell: cat ~/.kube/config
       register: k8s_config
 
-    - name: Copying .kube/config to local workstation
+    - name: Copying .kube/config to local
       local_action: copy content={{ k8s_config.stdout }} dest=~/.kube/config
