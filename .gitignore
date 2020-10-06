@@ -1,1 +1,4 @@
 playbooks/tasks/file/join_command.txt
+playbooks/vars.yml.sample
+playbooks/vars.yml.sample2
+playbooks/vars.yml

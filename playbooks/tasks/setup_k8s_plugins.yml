@@ -11,3 +11,11 @@
       
     - name: Add device plugin
       command: kubectl apply -f "{{ nvidia_device_plugin }}"
+
+    - name: copy ingress-nginx deploy yaml
+      copy: 
+        src: ./k8s/ingress-nginx-deploy.yaml
+        dest: /root/ingress-nginx-deploy.yaml 
+
+    - name: Add ingress nginx controller 
+      command: kubectl apply -f /root/ingress-nginx-deploy.yaml
