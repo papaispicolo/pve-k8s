@@ -10,3 +10,5 @@ kubectl create secret generic regcred \
 
 #kubectl delete secret regcred
 
+# 3. copy regred to another namespace
+#kubectl get secret regcred --namespace=default -o yaml | sed "s/default/dsstack/" | kubectl apply --namespace=dsstack -f -
